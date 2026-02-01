@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Admin - Transparansi Keuangan BEM FT</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --primary: #667eea;
+  --primary-dark: #5a67d8;
+  --secondary: #764ba2;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #3b82f6;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+  --border: #e2e8f0;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --transition: all 0.3s ease;
+  --gradient-1: linear-gradient(135deg, var(--primary), var(--secondary));
+  --gradient-2: linear-gradient(135deg, var(--success), #22d3ee);
+  --gradient-3: linear-gradient(135deg, var(--warning), #f97316);
+  --gradient-4: linear-gradient(135deg, var(--danger), #ec4899);
+}
+
+body {
+  background: linear-gradient(135deg, #667eea 0%, #e6dcf0 100%);
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #1e293b;
+  line-height: 1.6;
+}
+
+.container{max-width:1200px;margin:auto;padding:0 1.5rem}
+
+/* ===== HEADER ===== */
+header{
+  position:sticky;top:0;z-index:99;
+  background:rgba(255,255,255,.95);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(255,255,255,0.2);
+  box-shadow: var(--shadow-md);
+}
+.header-wrap{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:1rem 0;
+}
+.logo-box{display:flex;align-items:center;gap:1.5rem}
+.logo{
+  width:60px;height:60px;border-radius:20px;
+  background:var(--gradient-1);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:1.5rem;box-shadow: var(--shadow-lg);
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.brand-info h1{
+  font-size:1.75rem;font-weight:800;
+  background:var(--gradient-1);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;margin:0;
+}
+.brand-info p{color:var(--text-secondary);margin:0;font-size:.9rem}
+nav{display:flex;gap:1.5rem;align-items:center}
+nav a{text-decoration:none;color:var(--text-primary);font-weight:600;position:relative}
+nav a::after{
+  content:"";position:absolute;left:0;bottom:-4px;
+  width:0;height:2px;background:var(--gradient-1);
+  transition:var(--transition)
+}
+nav a:hover::after{width:100%}
+nav a.active::after{width:100%}
+
+.user-info{display:flex;align-items:center;gap:1rem}
+.user-avatar{
+  width:40px;height:40px;border-radius:50%;
+  background:var(--gradient-1);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-weight:700
+}
+.logout-btn{
+  padding:.75rem 1.5rem;border-radius:16px;
+  background:var(--danger);
+  color:#fff !important;font-size:1rem;
+  box-shadow: var(--shadow-md);font-weight:700;
+  display:inline-flex;align-items:center;gap:.5rem;
+  text-decoration: none;
+  transition: var(--transition);
+  border: none;
+  cursor: pointer;
+}
+.logout-btn:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4);
+}
+
+/* ===== TAB NAVIGATION ===== */
+.tab-navigation {
+  display: flex;
+  gap: 1rem;
+  margin: 2rem 0 1.5rem;
+  border-bottom: 2px solid var(--border);
+}
+
+.tab-btn {
+  padding: 1rem 2rem;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tab-btn:hover {
+  color: var(--primary);
+}
+
+.tab-btn.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* ===== CONTROLS ===== */
+.controls{
+  display:flex;gap:1rem;flex-wrap:wrap;
+  margin:2rem 0
+}
+.search-box{
+  flex:1;display:flex;background:#fff;border-radius:14px;
+  overflow:hidden;box-shadow:var(--shadow-sm);
+  min-width: 200px;
+}
+.search-box input{flex:1;border:none;padding:.9rem 1rem;outline:none}
+.search-box button{
+  border:none;background:var(--gradient-1);
+  color:#fff;padding:0 1.2rem;cursor:pointer;
+  transition: var(--transition);
+}
+.search-box button:hover{
+  opacity: 0.9;
+}
+select{
+  padding:.9rem 1rem;border-radius:14px;border:1px solid var(--border);
+  box-shadow:var(--shadow-sm);cursor:pointer;background:#fff
+}
+
+.btn{
+  padding:.9rem 1.5rem;border-radius:14px;border:none;
+  background:var(--gradient-1);color:#fff;font-weight:600;
+  cursor:pointer;box-shadow:var(--shadow-md);
+  transition:var(--transition);
+  display:inline-flex;align-items:center;gap:.5rem
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(102,126,234,.4)}
+
+.btn-secondary{
+  background:#e2e8f0;color:var(--text-primary)
+}
+.btn-secondary:hover{box-shadow:var(--shadow-lg)}
+
+/* ===== SUMMARY ===== */
+.summary{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:1.5rem;margin-bottom:2.5rem
+}
+.card{
+  background:rgba(255,255,255,0.9);
+  backdrop-filter:blur(10px);
+  border-radius:20px;padding:2rem;
+  box-shadow:var(--shadow-lg);
+  border:1px solid rgba(255,255,255,0.2);
+  transition:var(--transition)
+}
+.card:hover{transform:translateY(-2px);box-shadow:0 20px 40px rgba(0,0,0,.15)}
+.card span{color:var(--text-secondary);font-size:.85rem}
+.card h3{font-size:2.2rem;margin-top:.5rem;font-family:'JetBrains Mono',monospace}
+
+/* ===== MONTHLY REPORT CARD ===== */
+.monthly-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.month-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: var(--transition);
+}
+
+.month-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.month-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--border);
+}
+
+.month-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.month-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.stat-value.success {
+  color: var(--success);
+}
+
+.stat-value.warning {
+  color: var(--warning);
+}
+
+.month-total {
+  background: var(--gradient-1);
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.month-total-label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.month-total-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: white;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ===== YEARLY SUMMARY ===== */
+.yearly-summary {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-bottom: 2rem;
+}
+
+.yearly-summary h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.yearly-summary h2 i {
+  color: var(--primary);
+}
+
+.yearly-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+.yearly-stat-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
+}
+
+.yearly-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.yearly-stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.yearly-stat-icon.total {
+  background: var(--gradient-1);
+}
+
+.yearly-stat-icon.paid {
+  background: var(--gradient-2);
+}
+
+.yearly-stat-icon.unpaid {
+  background: var(--gradient-3);
+}
+
+.yearly-stat-icon.collected {
+  background: var(--gradient-4);
+}
+
+.yearly-stat-label {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.yearly-stat-value {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.text-success {
+  color: var(--success);
+}
+
+/* ===== TABLE ===== */
+.table-wrap{
+  background:#fff;border-radius:16px;overflow:hidden;
+  box-shadow:var(--shadow-lg);margin-bottom:2rem
+}
+table{width:100%;border-collapse:collapse}
+thead{background:var(--gradient-1);color:#fff}
+th{padding:1.2rem 1rem;text-align:left;font-weight:600;font-size:.9rem;text-transform:uppercase;letter-spacing:.5px}
+td{padding:1rem;border-bottom:1px solid var(--border)}
+tr:hover{background:var(--bg-secondary)}
+.badge{
+  padding:.4rem .8rem;border-radius:8px;font-size:.8rem;font-weight:600;
+  display:inline-block
+}
+.badge-success{background:#d1fae5;color:#065f46}
+.unpaid{background:#fef3c7;color:#92400e}
+.badge-info{background:#dbeafe;color:#1e40af}
+.badge-warning{background:#fed7aa;color:#92400e}
+
+.action-btns{display:flex;gap:.5rem}
+.icon-btn{
+  width:32px;height:32px;border-radius:8px;border:none;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:var(--transition)
+}
+.icon-btn.edit{background:#dbeafe;color:#1e40af}
+.icon-btn.delete{background:#fee2e2;color:#991b1b}
+.icon-btn:hover{transform:scale(1.1)}
+
+/* ===== MODAL ===== */
+.modal-overlay{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);
+  display:flex;align-items:center;justify-content:center;
+  z-index:1000;transition:var(--transition)
+}
+.modal-overlay.hidden{display:none}
+.modal-content{
+  background:#fff;border-radius:20px;padding:2rem;
+  max-width:500px;width:90%;max-height:90vh;overflow-y:auto;
+  box-shadow:0 20px 60px rgba(0,0,0,0.3)
+}
+.form-group{margin-bottom:1.5rem}
+.form-group label{
+  display:block;margin-bottom:.5rem;font-weight:600;
+  color:var(--text-primary)
+}
+.form-group input,
+.form-group select{
+  width:100%;padding:.9rem 1rem;border-radius:14px;
+  border:1px solid var(--border);box-shadow:var(--shadow-sm);
+  transition:var(--transition)
+}
+.form-group input:focus,
+.form-group select:focus{
+  outline:none;border-color:var(--primary);
+  box-shadow:0 0 0 3px rgba(102,126,234,0.1)
+}
+
+/* ===== TOAST ===== */
+.toast{
+  position:fixed;top:2rem;right:2rem;
+  background:#fff;padding:1rem 1.5rem;border-radius:14px;
+  box-shadow:var(--shadow-lg);
+  display:flex;align-items:center;gap:.75rem;
+  z-index:9999;
+  animation:slideInRight 0.3s ease-out
+}
+.toast.success{border-left:4px solid var(--success)}
+.toast.error{border-left:4px solid var(--danger)}
+.toast i{font-size:1.2rem}
+.toast.success i{color:var(--success)}
+.toast.error i{color:var(--danger)}
+
+@keyframes slideInRight{
+  from{transform:translateX(400px);opacity:0}
+  to{transform:translateX(0);opacity:1}
+}
+@keyframes slideOutRight{
+  from{transform:translateX(0);opacity:1}
+  to{transform:translateX(400px);opacity:0}
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .header-wrap { flex-direction: column; gap: 1rem; }
+  .controls { flex-direction: column; }
+  .search-box { width: 100%; }
+  .tab-navigation { overflow-x: auto; }
+  .tab-btn { white-space: nowrap; }
+}
+</style>
+</head>
+<body>
+    <header>
+        <div class="container header-wrap">
+            <div class="logo-box">
+                <div class="logo">
+                    <i class="fas fa-university"></i>
+                </div>
+                <div class="brand-info">
+                    <h1>Dashboard Admin</h1>
+                    <p>Kelola Keuangan BEM FT</p>
+                </div>
+            </div>
+            <div class="user-info">
+                <div>
+                    <div style="font-weight:600;color:var(--text-primary)" id="user-name">Admin</div>
+                    <span class="badge badge-info" id="user-role">admin</span>
+                </div>
+                <div class="user-avatar">A</div>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Summary Cards -->
+        <div class="summary">
+            <div class="card">
+                <span>Total Anggota</span>
+                <h3 id="total-members">0</h3>
+            </div>
+            <div class="card">
+                <span>Sudah Bayar</span>
+                <h3 id="paid-members" style="color:var(--success)">0</h3>
+            </div>
+            <div class="card">
+                <span>Belum Bayar</span>
+                <h3 id="unpaid-members" style="color:var(--warning)">0</h3>
+            </div>
+            <div class="card">
+                <span>Total Terkumpul</span>
+                <h3 id="total-collected">Rp 0</h3>
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <button class="tab-btn active" onclick="switchTab('overview')">
+                <i class="fas fa-users"></i>
+                Kelola Anggota
+            </button>
+            <button class="tab-btn" onclick="switchTab('monthly')">
+                <i class="fas fa-calendar-alt"></i>
+                Laporan Bulanan
+            </button>
+            <button class="tab-btn" onclick="switchTab('yearly')">
+                <i class="fas fa-chart-line"></i>
+                Laporan Tahunan
+            </button>
+        </div>
+
+        <div class="tab-container">
+            <!-- Overview Tab -->
+            <div id="overview-tab" class="tab-content active">
+                <div class="card">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem">
+                        <h3 style="margin:0;font-size:1.5rem;font-weight:700;color:var(--text-primary)">
+                            <i class="fas fa-users"></i> Data Anggota
+                        </h3>
+                        <button class="btn" onclick="openMemberModal()">
+                            <i class="fas fa-plus"></i> Tambah Anggota
+                        </button>
+                    </div>
+
+                    <div class="controls">
+                        <div class="search-box">
+                            <input type="text" id="member-search" placeholder="🔍 Cari nama, NIM, atau prodi...">
+                            <button onclick="filterMembers()">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                        <div style="display:flex;gap:1rem">
+                            <select id="payment-filter" onchange="filterMembers()">
+                                <option value="all">Semua Status</option>
+                                <option value="paid">Sudah Bayar</option>
+                                <option value="unpaid">Belum Bayar</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama</th>
+                                <th>NIM</th>
+                                <th>Prodi</th>
+                                <th>Jumlah</th>
+                                <th>Status</th>
+                                <th>Tgl Bayar</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="member-table-body">
+                            <tr>
+                                <td colspan="8" style="text-align:center;padding:2rem;color:#64748b">
+                                    <i class="fas fa-inbox" style="font-size:2rem;margin-bottom:1rem;opacity:0.3;display:block"></i>
+                                    Tidak ada data ditemukan
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Monthly Tab -->
+            <div id="monthly-tab" class="tab-content">
+                <div class="card">
+                    <h3 style="margin: 0 0 1.5rem 0; font-size: 1.5rem; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-calendar-alt" style="color: var(--primary);"></i>
+                        Laporan Pembayaran Kas Per Bulan
+                    </h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+                        Berikut adalah detail pembayaran kas anggota untuk setiap bulan
+                    </p>
+
+                    <div class="monthly-grid" id="monthly-grid">
+                        <!-- Monthly cards will be inserted here by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Yearly Tab -->
+            <div id="yearly-tab" class="tab-content">
+                <div class="yearly-summary">
+                    <h2>
+                        <i class="fas fa-chart-line"></i>
+                        Rekapan Kas Tahunan <span id="current-year" style="font-weight: 800;">2025</span>
+                    </h2>
+
+                    <div class="yearly-stats-grid">
+                        <div class="yearly-stat-card">
+                            <div class="yearly-stat-icon total">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="yearly-stat-label">Total Anggota</div>
+                            <div class="yearly-stat-value" id="yearly-total-members">0</div>
+                        </div>
+
+                        <div class="yearly-stat-card">
+                            <div class="yearly-stat-icon paid">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="yearly-stat-label">Sudah Lunas</div>
+                            <div class="yearly-stat-value text-success" id="yearly-paid-members">0</div>
+                        </div>
+
+                        <div class="yearly-stat-card">
+                            <div class="yearly-stat-icon unpaid">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="yearly-stat-label">Belum Lunas</div>
+                            <div class="yearly-stat-value" style="color: #f59e0b;" id="yearly-unpaid-members">0</div>
+                        </div>
+
+                        <div class="yearly-stat-card">
+                            <div class="yearly-stat-icon collected">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <div class="yearly-stat-label">Total Terkumpul</div>
+                            <div class="yearly-stat-value" id="yearly-total-collected">Rp 0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Monthly Breakdown -->
+                <div class="card">
+                    <h3 style="margin: 0 0 1.5rem 0; font-size: 1.25rem; font-weight: 700; color: var(--text-primary);">
+                        Rincian Per Bulan
+                    </h3>
+                    
+                    <div class="table-wrap" style="box-shadow: none; border: 1px solid var(--border);">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Bulan</th>
+                                    <th>Sudah Bayar</th>
+                                    <th>Belum Bayar</th>
+                                    <th>Total Terkumpul</th>
+                                </tr>
+                            </thead>
+                            <tbody id="yearly-breakdown-body">
+                                <!-- Yearly breakdown will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Member Modal -->
+    <div id="member-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3 id="member-modal-title" style="margin: 0; font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">Tambah Anggota</h3>
+                <button class="btn-secondary" onclick="closeMemberModal()" style="padding: 0.5rem; border-radius: 8px;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="member-form">
+                <input type="hidden" id="member-id">
+                
+                <div class="form-group">
+                    <label for="member-nim">NIM</label>
+                    <input type="text" id="member-nim" required placeholder="Masukkan NIM anggota"> 
+                </div>
+                
+                <div class="form-group">
+                    <label for="member-name">Nama Lengkap</label>
+                    <input type="text" id="member-name" required placeholder="Masukkan nama lengkap anggota">   
+                </div>
+                
+                <div class="form-group">    
+                    <label for="member-prodi">Program Studi</label>
+                    <select id="member-prodi" required>
+                        <option value="">-- Pilih Prodi --</option>
+                        <option value="Teknik Informatika">Teknik Informatika</option>
+                        <option value="Sistem Informasi">Sistem Informasi</option>
+                        <option value="Teknik Elektro">Teknik Elektro</option>
+                        <option value="Teknik Mesin">Teknik Mesin</option>
+                        <option value="Teknik Industri">Teknik Industri</option>
+                    </select>   
+                </div>
+                
+                <div class="form-group">
+                    <label for="member-amount">Jumlah Kas (Rp)</label>
+                    <input type="number" id="member-amount" required placeholder="Masukkan jumlah kas" min="0"> 
+                </div>
+                
+                <div class="form-group">    
+                    <label for="member-status">Status Pembayaran</label>
+                    <select id="member-status" required onchange="togglePaymentDate()">
+                        <option value="unpaid">Belum Bayar</option>
+                        <option value="paid">Sudah Bayar</option>
+                    </select>   
+                </div>
+                
+                <div class="form-group" id="payment-date-group">
+                    <label for="member-payment-date">Tanggal Bayar</label>
+                    <input type="date" id="member-payment-date">       
+                </div>
+
+                <div class="form-group">    
+                    <label for="member-method">Metode Pembayaran</label>
+                    <select id="member-method">
+                        <option value="-">-- Pilih Metode --</option>
+                        <option value="Tunai">Tunai</option>
+                        <option value="Transfer">Transfer</option>
+                        <option value="E-Wallet">E-Wallet</option>
+                    </select>   
+                </div>
+                
+                <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem;">
+                    <button type="button" class="btn-secondary" onclick="closeMemberModal()">Batal</button>
+                    <button type="submit" class="btn">Simpan</button>
+                </div>
+            </form> 
+        </div>
+    </div>
+
+    <!-- Delete Member Modal -->
+    <div id="delete-member-modal" class="modal-overlay hidden">
+        <div class="modal-content" style="max-width: 400px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="margin: 0; font-size: 1.25rem; font-weight: 700; color: var(--text-primary);">Hapus Anggota</h3>
+                <button class="btn-secondary" onclick="closeDeleteMemberModal()" style="padding: 0.5rem; border-radius: 8px;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <p style="margin-bottom: 2rem; color: var(--text-secondary);">Apakah Anda yakin ingin menghapus data anggota ini? Tindakan ini tidak dapat dibatalkan.</p>
+            
+            <div style="display: flex; justify-content: flex-end; gap: 1rem;">
+                <button type="button" class="btn-secondary" onclick="closeDeleteMemberModal()">Batal</button>
+                <button type="button" class="btn" onclick="confirmDeleteMember()" style="background: var(--danger);">Hapus</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
