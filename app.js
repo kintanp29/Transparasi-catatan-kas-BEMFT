@@ -34,7 +34,6 @@ function initDashboard() {
     // Load data
     loadData();
 
-
     // Set current year
     const currentYearEl = document.getElementById('current-year');
     if (currentYearEl) {
@@ -53,23 +52,30 @@ async function startAutoSync() {
     }, 3000);
 }
 
-// Sync data to persistent storage (shared with everyone)
-async function syncToStorage() {
+// Load data from persistent storage
+async function loadDataFromStorage() {
     try {
-        const data = {
-            members: members,
-            transactions: transactions,
-            lastUpdate: new Date().toISOString()
-        };
+        // Try to get shared data from persistent storage
+        const result = await window.storage.get('kas_bem_members_data', true);
         
-        // Save to localStorage
-        localStorage.setItem('kas_bem_data', JSON.stringify(data));
-        
-        // Trigger storage event manually for same-origin tabs if needed (though localStorage.setItem does this for other tabs)
-        // Note: window.storage is not a standard API. Using localStorage for persistence.
+        if (result && result.value) {
+            const data = JSON.parse(result.value);
+            members = data.members || [];
+        } else {
+            // Fallback to localStorage if storage API fails
+            const localData = JSON.parse(localStorage.getItem("kas_bem_data") || '{}');
+            members = localData.members || [];
+        }
     } catch (error) {
-        console.error('Error syncing to storage:', error);
+        console.log('Storage API not available, using localStorage');
+        // Fallback to localStorage
+        const localData = JSON.parse(localStorage.getItem("kas_bem_data") || '{}');
+        members = localData.members || [];
     }
+    
+    // Update all displays
+    loadAnggotaTable(members);
+    updateDashboardStats();
 }
     // Set up event listeners
     const searchInput = document.getElementById('dashboard-search');
@@ -569,11 +575,11 @@ function saveMember(event) {
     if (!data.members) data.members = [];
 
     const existingMember = data.members.find(m => 
-        m.nim === nim && (!id || m.id !== parseInt(id))
+        m.nim === nim && m.name === name && (!id || m.id !== parseInt(id))
     );
 
     if (existingMember) {
-        showToast('error', 'Anggota dengan NIM yang sama sudah ada!');
+        showToast('error', 'Anggota dengan NIM dan nama yang sama sudah ada!');
         return;
     }
 
