@@ -796,12 +796,22 @@ function hideLoading() {
 // Load data from persistent storage
 async function loadDataFromStorage() {
     try {
-        // Load from localStorage
+        // Try to get shared data from persistent storage
+        const result = await window.storage.get('kas_bem_members_data', true);
+        
+        if (result && result.value) {
+            const data = JSON.parse(result.value);
+            members = data.members || [];
+        } else {
+            // Fallback to localStorage if storage API fails
+            const localData = JSON.parse(localStorage.getItem("kas_bem_data") || '{}');
+            members = localData.members || [];
+        }
+    } catch (error) {
+        console.log('Storage API not available, using localStorage');
+        // Fallback to localStorage
         const localData = JSON.parse(localStorage.getItem("kas_bem_data") || '{}');
         members = localData.members || [];
-    } catch (error) {
-        console.error('Error loading data:', error);
-        members = [];
     }
     
     // Update all displays
